@@ -190,6 +190,10 @@ describe "Settingslogic" do
     SettingsEmpty.keys.should eql([])
   end
 
+  it "shuld work with aliases" do
+    SettingsWithAliases.b.should eql(3)
+  end
+
   # Put this test last or else call to .instance will load @instance,
   # masking bugs.
   it "should be a hash" do
