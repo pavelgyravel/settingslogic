@@ -33,6 +33,10 @@ class Settingslogic < Hash
       @suppress_errors ||= value
     end
 
+    def permitted_classes(value = [])
+      @permitted_classes ||= value
+    end
+
     def [](key)
       instance.fetch(key.to_s, nil)
     end
@@ -100,7 +104,7 @@ class Settingslogic < Hash
       self.replace hash_or_file
     else
       file_contents = open(hash_or_file).read
-      hash = file_contents.empty? ? {} : YAML.safe_load(ERB.new(file_contents).result, aliases: true).to_hash
+      hash = file_contents.empty? ? {} : YAML.safe_load(ERB.new(file_contents).result, aliases: true, permitted_classes: self.class.permitted_classes).to_hash
       if self.class.namespace
         hash = hash[self.class.namespace] or return missing_key("Missing setting '#{self.class.namespace}' in #{hash_or_file}")
       end
